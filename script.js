@@ -94,16 +94,67 @@ async function getPokemonData(api) {
     console.log(`TEST - su foto trasera está en: ${sprites["back_default"]}`);
     
     ////////////////////////
-    // Modificación del HTML en caso de que se encuentre el pokemonBuscado
+    // Modificación del HTML en caso de que se encuentre el pokemonBuscado inequívocamente
     ////////////////////////
 
-    // pokedex - titulo - nombre del pokemon
+    // crear articulo para ficha pokedex
+    const fragArticulo = document.createDocumentFragment();
+
+    const h2Articulo = document.createElement('h2');
+    
+    h2Articulo.textContent = `${name}`;
+    fragArticulo.append.h2Articulo;
+
+    const figure1Articulo = document.createElement('figure');
+    figure1Articulo.innerHTML =
+    `
+    <img id='imgFrontal' src="${sprites["front_default"]}" alt="imagen frontal del pokemon" />
+    <img id='imgTrasera' src="${sprites["back_default"]}" alt="imagen trasera del pokemon" />
+    `;
+    fragArticulo.append.figure1Articulo;
+    
+    const h3Articulo = document.createElement('h3');
+    h3Articulo.textContent = `Los atributos del pokemon son:`;
+    fragArticulo.append.h3Articulo;
+
+    const listaArticulo = document.createElement('ul');
+    listaArticulo.innerHTML = 
+    `
+    <li>Altura: ${height}</li>
+      <li>Peso: ${weight}</li>
+      <li>Puntos de vida: ${stats[0]["base_stat"]}</li>
+      <li>Puntos de ataque: ${stats[1]["base_stat"]}</li>
+      <li>Puntos de defensa: ${stats[2]["base_stat"]}</li>
+      <li>Velocidad: ${stats[5]["base_stat"]}</li>
+      <li>Tipos: ${types[0]["type"]["name"]}</li>
+    `;
+    console.log(fragArticulo);
+    fragArticulo.append.listaArticulo;
+
+    const htmlMain = document.querySelector('#main-f');
+    htmlMain.append.fragArticulo;
+  }
+/*     // pokedex - titulo - nombre del pokemon
     document.querySelector('main > article > h2').textContent = `${name}`;
 
     // pokedex - imagenes
     document.querySelector('main > article > figure').innerHTML = `<img id='imgFrontal' src="${sprites["front_default"]}" alt="imagen frontal del pokemon" /> <img id='imgTrasera' src="${sprites["back_default"]}" alt="imagen trasera del pokemon" />` ;
 
-  }
+    // pokedex atributos
+    document.querySelector('main > article > section > h3').textContent = `Los atributos del pokemon son:`;
+
+      document.querySelector('#listado-atributos').innerHTML = 
+      `
+      <li>Altura: ${height}</li>
+      <li>Peso: ${weight}</li>
+      <li>Puntos de vida: ${stats[0]["base_stat"]}</li>
+      <li>Puntos de ataque: ${stats[1]["base_stat"]}</li>
+      <li>Puntos de defensa: ${stats[2]["base_stat"]}</li>
+      <li>Velocidad: ${stats[5]["base_stat"]}</li>
+      <li>Tipos: ${types[0]["type"]["name"]}</li>
+      `
+    } */
+
   // gestion en caso de error
   catch (error) {
     console.error(error);
@@ -202,19 +253,30 @@ async function checkPokemonCatalogo(api, inputUsuario) {
     else {
       console.log(`TEST - hay varios pokemons con ese nombre`)
       ////////////////////////
-      // Modificación del HTML en caso de que Sï se ecuentren varios pokemons
+      // Modificación del HTML en caso de que SÍ se ecuentren varios pokemons
       ////////////////////////
 
       // pokedex - titulo - nombre del pokemon
-      document.querySelector('main > article > h2').textContent = `Existen varios pokemon cuyo nombre contiene ${pokemonBuscado}`;
+      document.querySelector('h2.varios').textContent = `Existen varios pokemon cuyo nombre contiene ${pokemonBuscado}`;
 
+      document.querySelector('h3.varios').textContent = `Estos son los pokemons:`
       // pokedex - imagenes
-      document.querySelector('main > article > figure').innerHTML = `<img id='imgFrontal' src="./img/pokemon-repetido.jpg" alt="imagen frontal del pokemon" />`;
+      //////////////////////////////////////////
+      ////////////////////////////////////////// CAMBIAR IMAGEN
+      //////////////////////////////////////////
+      document.querySelector('figure.varios').innerHTML = `<img id='imgFrontal' src="./img/pokemon-repetido.jpg" alt="imagen frontal del pokemon" />`;
 
       // pokedex - section titulo
-      document.querySelector('main > article > section > h3').textContent = `Quizás buscabas alguno de los siguientes:`;
+      document.querySelector('main > article > section > h2').textContent = `${pokemonBuscado}`;
 
-      // pokedex - lista similaresPokemonBuscado
+      for (let pokemon of registroPokemonBuscado){
+        const nuevoArticle = getPokemonData(pokemon);
+        document.querySelector(main).append('nuevoArticle');
+      }
+      // meter varios articles para varias pokedex
+      // por cada pokemon en el registro
+
+/*       // pokedex - lista similaresPokemonBuscado
         // crear fragmento a añadir
       const fragSimilares = document.createDocumentFragment();
       for (let pokemon of registroPokemonBuscado) {
@@ -226,7 +288,7 @@ async function checkPokemonCatalogo(api, inputUsuario) {
         fragSimilares.append(li);
         // añadir a la lista ul
         document.querySelector('main > article > section > ul').append(fragSimilares);
-      }
+      } */
     }
   }
   // gestion en caso de error
