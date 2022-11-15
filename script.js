@@ -170,7 +170,7 @@ async function checkPokemonCatalogo(api, inputUsuario) {
       document.querySelector('main > article > h2').textContent = `No existe ningún pokemon con el nombre ${pokemonBuscado}`;
 
       // pokedex - imagenes
-      document.querySelector('main > article > figure').innerHTML = `<img id='imgFrontal' src="./img/no-pokemon.webp" alt="imagen frontal del pokemon" /> <img id='imgTrasera' src="./img/no-pokemon.webp" alt="imagen trasera del pokemon" />`;
+      document.querySelector('main > article > figure').innerHTML = `<img id='imgFrontal' src="./img/no-pokemon.gif" alt="imagen frontal del pokemon" />`;
 
       // pokedex - section titulo
       document.querySelector('main > article > section > h3').textContent = `Quizás buscabas alguno de los siguientes:`;
@@ -209,7 +209,7 @@ async function checkPokemonCatalogo(api, inputUsuario) {
       document.querySelector('main > article > h2').textContent = `Existen varios pokemon cuyo nombre contiene ${pokemonBuscado}`;
 
       // pokedex - imagenes
-      document.querySelector('main > article > figure').innerHTML = `<img id='imgFrontal' src="./img/no-pokemon.webp" alt="imagen frontal del pokemon" /> <img id='imgTrasera' src="./img/no-pokemon.webp" alt="imagen trasera del pokemon" />`;
+      document.querySelector('main > article > figure').innerHTML = `<img id='imgFrontal' src="./img/pokemon-repetido.jpg" alt="imagen frontal del pokemon" />`;
 
       // pokedex - section titulo
       document.querySelector('main > article > section > h3').textContent = `Quizás buscabas alguno de los siguientes:`;
