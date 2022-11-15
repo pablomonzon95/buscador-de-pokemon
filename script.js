@@ -51,6 +51,7 @@ async function getPokemonData(api) {
 
     // Desestructuro apiData para extrer los datos de interes de la respuesta
     const { height, name, weight, stats, types, sprites } = apiData;
+
     // height: num; valor de altura
     // name: string; nombre
     // weight: num; peso
@@ -97,64 +98,52 @@ async function getPokemonData(api) {
     // Modificación del HTML en caso de que se encuentre el pokemonBuscado inequívocamente
     ////////////////////////
 
-    // crear articulo para ficha pokedex
-    const fragArticulo = document.createDocumentFragment();
+    // creo la ficha de datos del poquemon en una ficha, a trozos, y luego la añado al html
 
-    const h2Articulo = document.createElement('h2');
-    
-    h2Articulo.textContent = `${name}`;
-    fragArticulo.append.h2Articulo;
+    // crear fragmento a añadir
+      const fragPokedex = document.createDocumentFragment();
+      
+      // titulo de la ficha: nombre del pokemon
+      const pokedexTitulo = document.createElement('h3');
+      pokedexTitulo.innerHTML = `${name}`;
+      fragPokedex.append(pokedexTitulo);
 
-    const figure1Articulo = document.createElement('figure');
-    figure1Articulo.innerHTML =
-    `
-    <img id='imgFrontal' src="${sprites["front_default"]}" alt="imagen frontal del pokemon" />
-    <img id='imgTrasera' src="${sprites["back_default"]}" alt="imagen trasera del pokemon" />
-    `;
-    fragArticulo.append.figure1Articulo;
-    
-    const h3Articulo = document.createElement('h3');
-    h3Articulo.textContent = `Los atributos del pokemon son:`;
-    fragArticulo.append.h3Articulo;
+      // imagenes de la ficha
+      const pokedexImagenes = document.createElement('figure');
+      pokedexImagenes.innerHTML =
+        `<img id='imgFrontal' src="${sprites["front_default"]}" alt="imagen frontal del pokemon" />
+        <img id='imgTrasera' src="${sprites["back_default"]}" alt="imagen trasera del pokemon" />`;
+      fragPokedex.append(pokedexImagenes);
 
-    const listaArticulo = document.createElement('ul');
-    listaArticulo.innerHTML = 
-    `
-    <li>Altura: ${height}</li>
-      <li>Peso: ${weight}</li>
-      <li>Puntos de vida: ${stats[0]["base_stat"]}</li>
-      <li>Puntos de ataque: ${stats[1]["base_stat"]}</li>
-      <li>Puntos de defensa: ${stats[2]["base_stat"]}</li>
-      <li>Velocidad: ${stats[5]["base_stat"]}</li>
-      <li>Tipos: ${types[0]["type"]["name"]}</li>
-    `;
-    console.log(fragArticulo);
-    fragArticulo.append.listaArticulo;
+      // lista de atributos de la ficha
+        // enunciado de lista
+      const pokedexListaTitulo = document.createElement('h4');
+      pokedexListaTitulo.innerHTML = `Atributos del pokemon ${name}:`;
+      fragPokedex.append(pokedexListaTitulo);
 
-    const htmlMain = document.querySelector('#main-f');
-    htmlMain.append.fragArticulo;
+      // lista de atributos
+      const pokedexLista = document.createElement('ul');
+
+      // por cada elemento-atributo del array stats
+      for (let atributo of stats) {
+        const pokedexListaItem = document.createElement('li');
+        pokedexListaItem.textContent = `${atributo["stat"]["name"]}: ${atributo["base_stat"]}`
+        pokedexLista.append(pokedexListaItem);
+      }
+
+      // por cada elemento-tipo en el array de types
+      for (let tipo of types) {
+        const pokedexListaItem = document.createElement('li');
+        pokedexListaItem.textContent = `Tipo ${tipo["slot"]}: ${tipo["type"]["name"]}`
+        pokedexLista.append(pokedexListaItem);
+      }
+      
+      // añadir lista de atributos al fragmento
+      fragPokedex.append(pokedexLista);
+
+      // añadir ficha de datos al HTML
+      document.querySelector('#pokedex-fichas').append(fragPokedex);
   }
-/*     // pokedex - titulo - nombre del pokemon
-    document.querySelector('main > article > h2').textContent = `${name}`;
-
-    // pokedex - imagenes
-    document.querySelector('main > article > figure').innerHTML = `<img id='imgFrontal' src="${sprites["front_default"]}" alt="imagen frontal del pokemon" /> <img id='imgTrasera' src="${sprites["back_default"]}" alt="imagen trasera del pokemon" />` ;
-
-    // pokedex atributos
-    document.querySelector('main > article > section > h3').textContent = `Los atributos del pokemon son:`;
-
-      document.querySelector('#listado-atributos').innerHTML = 
-      `
-      <li>Altura: ${height}</li>
-      <li>Peso: ${weight}</li>
-      <li>Puntos de vida: ${stats[0]["base_stat"]}</li>
-      <li>Puntos de ataque: ${stats[1]["base_stat"]}</li>
-      <li>Puntos de defensa: ${stats[2]["base_stat"]}</li>
-      <li>Velocidad: ${stats[5]["base_stat"]}</li>
-      <li>Tipos: ${types[0]["type"]["name"]}</li>
-      `
-    } */
-
   // gestion en caso de error
   catch (error) {
     console.error(error);
@@ -191,11 +180,16 @@ async function checkPokemonCatalogo(api, inputUsuario) {
     console.log(`TEST - registroPokemonBuscado en siguiente linea`);
     // test
     console.log(registroPokemonBuscado);
+    //
     ////////////////////////
     // Comprobación existencia pokemonBuscado
     ////////////////////////
+    //
     // compruebo si pokemonBuscado NO existe en el catálogo de la API (caso que registroPokemonBuscado está vacio)
+    //////////////////////////////
     // si NO existe pokemonBuscado
+    //////////////////////////////
+    //
     if (registroPokemonBuscado.length === 0) {
       // test
       console.log(`TEST - No existe ningún pokemon con el nombre ${pokemonBuscado}`);
@@ -217,30 +211,49 @@ async function checkPokemonCatalogo(api, inputUsuario) {
       // Modificación del HTML en caso de que NO se encuentre el pokemonBuscado
       ////////////////////////
 
-      // pokedex - titulo - nombre del pokemon
-      document.querySelector('main > article > h2').textContent = `No existe ningún pokemon con el nombre ${pokemonBuscado}`;
+      // pokedex - preInfo
+      // crear fragmento
+      const fragPreInfo = document.createDocumentFragment();
 
-      // pokedex - imagenes
-      document.querySelector('main > article > figure').innerHTML = `<img id='imgFrontal' src="./img/no-pokemon.gif" alt="imagen frontal del pokemon" />`;
+      // titulo preInfo
+      const preInfoTitulo = document.createElement('h2');
+      preInfoTitulo.innerHTML = `No existe ningún pokemon con el nombre "${pokemonBuscado}"`;
+      fragPreInfo.append(preInfoTitulo);
 
-      // pokedex - section titulo
-      document.querySelector('main > article > section > h3').textContent = `Quizás buscabas alguno de los siguientes:`;
+      // imagen preInfo
+      const preInfoImagen = document.createElement('figure');
+      preInfoImagen.innerHTML = `<img id='imgFrontal' src="./img/no-pokemon.gif" alt="no existe ese pokemon" />`;
+      fragPreInfo.append(preInfoImagen);
 
-      // pokedex - lista similaresPokemonBuscado
-        // crear fragmento a añadir
+      // inidcador lista simialres preInfo
+      const preInfoEnunciadoLista = document.createElement('h3');
+      preInfoTitulo.innerHTML = `Quizás buscas alguno de estos:`;
+      fragPreInfo.append(preInfoTitulo);
+      
+      // lista similaresPokemonBuscado
+      const preInfoListaSimilares = document.createElement('ul');
+      // crear subfragmento a añadir
       const fragSimilares = document.createDocumentFragment();
-      for (let nombre of similaresPokemonBuscado) {
+      for (let pokemon of similaresPokemonBuscado) {
         // crear el elemento a añadir en cada ciclo
-        const li = document.createElement('li');
+        const pokemonSimilar = document.createElement('li');
         // añadir contenido a cada li
-        li.innerHTML = `${nombre.name}`;
+        pokemonSimilar.innerHTML = `${pokemon.name}`;
         // añadir al fragmento
-        fragSimilares.append(li);
-        // añadir a la lista ul
-        document.querySelector('main > article > section > ul').append(fragSimilares);
+        fragSimilares.append(pokemonSimilar);        
       }
+      // añadir fragSimilares a lista
+      preInfoListaSimilares.append(fragSimilares);
+      // añadir lista a fragPreInfo
+      fragPreInfo.append(preInfoListaSimilares);
+
+      // añadir fragPreInfo a seleccion
+      document.querySelector('#pokedex-preInfo').append(fragPreInfo);
     }
+    //////////////////////////////
     // si SÍ existe inequívocamente pokemonBuscado (registroPokemonBuscado no vacio)
+    //////////////////////////////
+    //
     else if (registroPokemonBuscado.length === 1) {
       // test
       console.log(`TEST - El pokemon buscado, ${pokemonBuscado}, existe y su info está disponible en: ${registroPokemonBuscado[0]["url"]}.`)
@@ -249,46 +262,37 @@ async function checkPokemonCatalogo(api, inputUsuario) {
       // llamada para obtener datos del pokemonBuscado
       getPokemonData(registroPokemonBuscado[0]["url"]);
     }
+    //////////////////////////////
     // si SÍ existe, pero existen más de 1 pokemon con pokemonBuscado en el nombre:
+    //////////////////////////////
     else {
       console.log(`TEST - hay varios pokemons con ese nombre`)
       ////////////////////////
       // Modificación del HTML en caso de que SÍ se ecuentren varios pokemons
       ////////////////////////
 
-      // pokedex - titulo - nombre del pokemon
-      document.querySelector('h2.varios').textContent = `Existen varios pokemon cuyo nombre contiene ${pokemonBuscado}`;
+      // pokedex - preInfo
+      // crear fragmento
+      const fragPreInfo = document.createDocumentFragment();
 
-      document.querySelector('h3.varios').textContent = `Estos son los pokemons:`
-      // pokedex - imagenes
-      //////////////////////////////////////////
-      ////////////////////////////////////////// CAMBIAR IMAGEN
-      //////////////////////////////////////////
-      document.querySelector('figure.varios').innerHTML = `<img id='imgFrontal' src="./img/pokemon-repetido.jpg" alt="imagen frontal del pokemon" />`;
+      // titulo preInfo
+      const preInfoTitulo = document.createElement('h2');
+      preInfoTitulo.innerHTML = `Existen varios pokemon con nombre muy similar a "${pokemonBuscado}"`;
+      fragPreInfo.append(preInfoTitulo);
 
-      // pokedex - section titulo
-      document.querySelector('main > article > section > h2').textContent = `${pokemonBuscado}`;
+      // imagen preInfo
+      const preInfoImagen = document.createElement('figure');
+      preInfoImagen.innerHTML = `<img id='imgFrontal' src="./img/no-pokemon.gif" alt="hay varios pokemon con ese nombre" />`;
+      fragPreInfo.append(preInfoImagen);
 
-      for (let pokemon of registroPokemonBuscado){
-        const nuevoArticle = getPokemonData(pokemon);
-        document.querySelector(main).append('nuevoArticle');
-      }
-      // meter varios articles para varias pokedex
-      // por cada pokemon en el registro
-
-/*       // pokedex - lista similaresPokemonBuscado
-        // crear fragmento a añadir
-      const fragSimilares = document.createDocumentFragment();
+      // añadir fragPreInfo a seleccion
+      document.querySelector('#pokedex-preInfo').append(fragPreInfo);
+      
+      // llamo a la función para crear la ficha de datos tantas veces como pokemons de mismo nombre
       for (let pokemon of registroPokemonBuscado) {
-        // crear el elemento a añadir en cada ciclo
-        const li = document.createElement('li');
-        // añadir contenido a cada li
-        li.innerHTML = `${pokemon.name}`;
-        // añadir al fragmento
-        fragSimilares.append(li);
-        // añadir a la lista ul
-        document.querySelector('main > article > section > ul').append(fragSimilares);
-      } */
+        getPokemonData(pokemon["url"]);
+      }
+
     }
   }
   // gestion en caso de error
