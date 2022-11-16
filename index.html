@@ -8,20 +8,22 @@
 </head>
 <body>
     <header>
-    <h1>Pokedex</h1>
+    <h1>Pokedex: catálogo de pokemons</h1>
     </header>
-    <main id="main-f">
+    <main>
         <form id="formulario">
         <label for="buscador-pokemon"> Encuentra tu pokemon:</label>
-        <input type="search" id="buscador-pokemon" name="pokedex">
-        <button id="boton">Buscar</button>
+        <input type="search" id="buscador-pokemon" name="pokedex" required>
+        <button>Buscar</button>
         </form>
 
-        <!-- para indicar si existe, si no existe o son varios -->
-        <section id="pokedex-preInfo"></section>
+        <!-- para indicar info sobre la búsqueda (si existe o no) -->
+        <section id="pokedex-preInfo">
+        </section>
 
         <!-- para visualizar la ficha de datos del pokemon -->
-        <section id="pokedex-fichas"></section>
+        <section id="pokedex-fichas">
+        </section>
 
     </main>
     <footer>Primer proyecto HackaBoss- Gonzalo M.G y Pablo Monzón </footer>

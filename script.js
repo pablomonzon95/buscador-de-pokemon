@@ -160,10 +160,27 @@ async function getPokemonData(api) {
 // Funcion para comprobar si el pokemon buscado existe en el catálogo y obtener su url; si no existe devuelve un listado de pokemons q empiezan por la misma letra que el input del usuario
 //
 async function checkPokemonCatalogo(api, inputUsuario) {
+
   // pasar a minusculas el input del usuario, por si escribe con mayusculas
   const pokemonBuscado = inputUsuario.toLowerCase();
 
   try {
+    // preparar html: crear elementos a inyectar en preInfo
+
+    // preInfo a la ficha
+        // crear fragmento
+        const fragPreInfo = document.createDocumentFragment();
+
+        // imagen preInfo
+        const preInfoImagen = document.createElement('figure');
+
+        // titulo preInfo
+        const preInfoTitulo = document.createElement('h2');
+
+        // aviso preInfo
+        const preInfoAviso = document.createElement('h3');
+
+
     // llamo a getApiData para obtener los datos
     const apiData = await getApiData(api);
     /* 
@@ -208,23 +225,12 @@ async function checkPokemonCatalogo(api, inputUsuario) {
       -- Modificación del HTML
       ------------------------
       */
-      // preInfo a la ficha
-        // crear fragmento
-      const fragPreInfo = document.createDocumentFragment();
-
-      // titulo preInfo
-      const preInfoTitulo = document.createElement('h2');
-      preInfoTitulo.innerHTML = `No existe ningún pokemon con el nombre "${pokemonBuscado}"`;
-      fragPreInfo.append(preInfoTitulo);
-
       // imagen preInfo
-      const preInfoImagen = document.createElement('figure');
       preInfoImagen.innerHTML = `<img id='imgFrontal' src="./img/no-pokemon.gif" alt="no existe ese pokemon" />`;
       fragPreInfo.append(preInfoImagen);
 
-      // enunciado lista similares preInfo
-      const preInfoEnunciadoLista = document.createElement('h3');
-      preInfoTitulo.innerHTML = `Quizás buscas alguno de estos:`;
+      // notas preInfo
+      preInfoTitulo.innerHTML = `No existe ningún pokemon con el nombre "${pokemonBuscado}". Quizás buscas alguno de los siguientes.`;
       fragPreInfo.append(preInfoTitulo);
       
       // lista similaresPokemonBuscado
@@ -258,19 +264,13 @@ async function checkPokemonCatalogo(api, inputUsuario) {
       -- Modificación del HTML
       ------------------------
       */
-      // pokedex - preInfo
-      // crear fragmento
-      const fragPreInfo = document.createDocumentFragment();
-
-      // titulo preInfo
-      const preInfoTitulo = document.createElement('h2');
-      preInfoTitulo.innerHTML = `El pokemon ${pokemonBuscado} está registrado`;
-      fragPreInfo.append(preInfoTitulo);
-
       // imagen preInfo
-      const preInfoImagen = document.createElement('figure');
       preInfoImagen.innerHTML = `<img id='imgFrontal' src="./img/poke-ball" alt="imagen de una pokeball" />`;
       fragPreInfo.append(preInfoImagen);
+
+      // notas preInfo
+      preInfoTitulo.innerHTML = `El pokemon "${pokemonBuscado}" está registrado. Esta es su ficha de datos.`;
+      fragPreInfo.append(preInfoTitulo);
 
       // añadir fragPreInfo a seleccion
       document.querySelector('#pokedex-preInfo').append(fragPreInfo);
@@ -290,18 +290,14 @@ async function checkPokemonCatalogo(api, inputUsuario) {
       ------------------------
       */
       // pokedex - preInfo
-      // crear fragmento
-      const fragPreInfo = document.createDocumentFragment();
-
-      // titulo preInfo
-      const preInfoTitulo = document.createElement('h2');
-      preInfoTitulo.innerHTML = `Existen varios pokemon con nombre muy similar a "${pokemonBuscado}"`;
-      fragPreInfo.append(preInfoTitulo);
 
       // imagen preInfo
-      const preInfoImagen = document.createElement('figure');
       preInfoImagen.innerHTML = `<img id='imgFrontal' src="./img/no-pokemon.gif" alt="hay varios pokemon con ese nombre" />`;
       fragPreInfo.append(preInfoImagen);
+
+      // notas preInfo
+      preInfoTitulo.innerHTML = `Existen varios pokemon de nombre "${pokemonBuscado}". Estas son sus fichas de datos.`;
+      fragPreInfo.append(preInfoTitulo);
 
       // añadir fragPreInfo a seleccion
       document.querySelector('#pokedex-preInfo').append(fragPreInfo);
@@ -326,6 +322,12 @@ const formulario = document.forms.formulario;
 function formSubmitHandle(e) {
   // evitar recarga de pagina tras enviar
   e.preventDefault();
+
+    /* 
+    ++++++++++++++++++++++++++++++
+    ++ Limpiar el html entre busqedas
+    ++++++++++++++++++++++++++++++
+  */
 
   // crear objeto FormData con el input cuadno se envia
   const dataFormulario = new FormData(formulario);
