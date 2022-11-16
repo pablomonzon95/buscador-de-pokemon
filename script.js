@@ -43,7 +43,7 @@ async function getApiData(api) {
 ///////////////////////
 //// FUNCION DATOS FICHA POKEMON
 ///////////////////////
-// Función q recupera los datos del pokemon y construye la ficha de informacion (la pokedex)
+// Función q recupera los datos del pokemon y construye la ficha de informacion
 //
 async function getPokemonData(api) {
   try {
@@ -157,7 +157,7 @@ async function getPokemonData(api) {
 //// FUNCION CATALOGO
 ///////////////////////
 //
-// Funcion para comprobar si el pokemon buscado existe en el catálogo y obtener su url; si no existe devuelve un listado de pokemons q empiezan por la misma letra que el input del usuario
+// Funcion para comprobar si el pokemon buscado existe en el catálogo y obtener su url; devuelve unas notas informando sobre el éxito de la busqueda, y si no existe el pokemon buscado tambien devuelve un listado de pokemons q empiezan por la misma letra
 //
 async function checkPokemonCatalogo(api, inputUsuario) {
 
@@ -165,7 +165,22 @@ async function checkPokemonCatalogo(api, inputUsuario) {
   const pokemonBuscado = inputUsuario.toLowerCase();
 
   try {
-    // preparar html: crear elementos a inyectar en preInfo
+    /*
+    ++++++++++++++++++++++++++++++
+    ++ Preparación del HTML
+    ++++++++++++++++++++++++++++++
+    ------------------------
+    -- Modificación del HTML
+    ------------------------
+    */
+    // Borrar registro entre búsqueda y búsqueda: escribiendo un vacio ""
+      // sección preInfo
+    document.querySelector('#pokedex-preInfo').innerHTML = "";
+
+      // sección fichas
+    document.querySelector('#pokedex-fichas').innerHTML = "";
+
+    // Crear elementos a inyectar en preInfo
 
     // preInfo a la ficha
         // crear fragmento
@@ -176,11 +191,12 @@ async function checkPokemonCatalogo(api, inputUsuario) {
 
         // titulo preInfo
         const preInfoTitulo = document.createElement('h2');
-
-        // aviso preInfo
-        const preInfoAviso = document.createElement('h3');
-
-
+    //
+    /*
+    ++++++++++++++++++++++++++++++
+    ++ Obtención de datos
+    ++++++++++++++++++++++++++++++
+    */
     // llamo a getApiData para obtener los datos
     const apiData = await getApiData(api);
     /* 
@@ -269,7 +285,7 @@ async function checkPokemonCatalogo(api, inputUsuario) {
       fragPreInfo.append(preInfoImagen);
 
       // notas preInfo
-      preInfoTitulo.innerHTML = `El pokemon "${pokemonBuscado}" está registrado. Esta es su ficha de datos.`;
+      preInfoTitulo.innerHTML = `El pokemon "${pokemonBuscado}" está registrado; puedes ver su ficha de datos a continuación.`;
       fragPreInfo.append(preInfoTitulo);
 
       // añadir fragPreInfo a seleccion
@@ -296,7 +312,7 @@ async function checkPokemonCatalogo(api, inputUsuario) {
       fragPreInfo.append(preInfoImagen);
 
       // notas preInfo
-      preInfoTitulo.innerHTML = `Existen varios pokemon de nombre "${pokemonBuscado}". Estas son sus fichas de datos.`;
+      preInfoTitulo.innerHTML = `Existen varios pokemon de nombre "${pokemonBuscado}"; puedes ver sus fichas de datos a continuación.`;
       fragPreInfo.append(preInfoTitulo);
 
       // añadir fragPreInfo a seleccion
