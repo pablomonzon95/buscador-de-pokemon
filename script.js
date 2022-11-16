@@ -95,7 +95,9 @@ async function getPokemonData(api) {
     }
     // CONSTRUCCION DE LA FICHA DE DATOS DEL POKEMON: la creo a trozos, y luego la añado al html
     // crear fragmento-ficha a añadir
+     const contenedorCarta = document.createElement('article');
       const fragPokedex = document.createDocumentFragment();
+      
       
       // titulo de la ficha: nombre del pokemon
         // crear elemento
@@ -116,7 +118,7 @@ async function getPokemonData(api) {
         // crear elemento
       const pokedexListaTitulo = document.createElement('h4');
         // añadir contenido al elemento
-      pokedexListaTitulo.innerHTML = `Atributos del pokemon ${name}:`;
+      pokedexListaTitulo.innerHTML = `Atributos del pokemon:`;
         // añadie elemento al fragmento-ficha
       fragPokedex.append(pokedexListaTitulo);
       
@@ -145,7 +147,8 @@ async function getPokemonData(api) {
       // añadir lista de atributos al fragmento
       fragPokedex.append(pokedexLista);
       // añadir ficha de datos al HTML
-      document.querySelector('#pokedex-fichas').append(fragPokedex);
+      contenedorCarta.append(fragPokedex);
+      document.querySelector('#pokedex-fichas').append(contenedorCarta);
   }
   // gestion en caso de error
   catch (error) {
@@ -281,8 +284,8 @@ async function checkPokemonCatalogo(api, inputUsuario) {
       ------------------------
       */
       // imagen preInfo
-      preInfoImagen.innerHTML = `<img id='imgFrontal' src="./img/poke-ball" alt="imagen de una pokeball" />`;
-      fragPreInfo.append(preInfoImagen);
+     // preInfoImagen.innerHTML = `<img id='imgFrontal' src="./img/poke-ball" alt="imagen de una pokeball" />`;
+     // fragPreInfo.append(preInfoImagen);
 
       // notas preInfo
       preInfoTitulo.innerHTML = `El pokemon "${pokemonBuscado}" está registrado; puedes ver su ficha de datos a continuación.`;
@@ -307,9 +310,7 @@ async function checkPokemonCatalogo(api, inputUsuario) {
       */
       // pokedex - preInfo
 
-      // imagen preInfo
-      preInfoImagen.innerHTML = `<img id='imgFrontal' src="./img/no-pokemon.gif" alt="hay varios pokemon con ese nombre" />`;
-      fragPreInfo.append(preInfoImagen);
+      
 
       // notas preInfo
       preInfoTitulo.innerHTML = `Existen varios pokemon de nombre "${pokemonBuscado}"; puedes ver sus fichas de datos a continuación.`;

@@ -1,0 +1,126 @@
+*{
+    padding: 0;
+    margin:0;
+    box-sizing: border-box;
+   
+}
+header{
+    display: flex;
+    min-height: 14vh;
+    padding: 1.5rem;
+    background-color: red;
+    color:antiquewhite;
+    justify-content: space-around;
+    border: solid 1px gray;
+    
+}
+h1{
+    -webkit-text-stroke: 1px gray;
+    font-size: 2rem;
+    font-family: 'Pokemon Solid', sans-serif;
+    
+                                                
+}
+header img{
+    max-width: 2rem;
+}
+main{
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    background-color: rgba(205, 247, 248, 0.688);
+    min-height: 81vh;
+   
+  
+}
+main form{
+    text-align: center;
+    margin-left:13%;
+}
+label{
+    font-size: 1.3rem; 
+    font-family: 'Pokemon Solid', sans-serif;
+    
+}
+input{
+    margin:1.2rem 0rem;
+    padding:0.6rem;
+    border: 2px solid black;
+}
+button{
+    padding: 0.45rem;
+    background-color: red;
+    color: antiquewhite;
+    font-size: large;
+    font-weight: bold;
+    -webkit-text-stroke: 0.1px gray;
+}
+
+section{
+    margin-left: 13%;
+
+}
+#pokedex-preInfo figure{
+    display: flex;
+    justify-content: center;
+}
+#pokedex-preInfo figure img{
+    max-width: 20rem;
+    border: 2px solid gray;
+}
+#pokedex-preInfo h2{
+    font-size: 1rem;
+    font-weight: 400;
+    margin: 1rem;
+}
+#pokedex-preInfo ul {
+    text-align: center;
+    list-style: none;
+}
+#pokedex-preInfo ul li{
+    padding: 0.2rem;
+}
+#pokedex-fichas {
+
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+   
+}
+#pokedex-fichas article{
+ border: 3px solid gray;
+ min-width: 20rem;
+ display:flex;
+ flex-direction: column;
+ align-items: center;
+ padding:0.5rem;
+ border-radius: 3rem;
+ background-color: white;
+
+}
+#pokedex-fichas h3 {
+    margin: 0.8rem;
+    text-align: center;
+}
+footer {
+    height: 5vh;
+    background-color: red;
+    color: antiquewhite;
+    text-align: center;
+    padding: 0.3rem;
+}
+ @media screen and (min-width: 800px){
+    #pokedex-preInfo h2{
+        text-align: center;
+    }
+    #pokedex-fichas {
+        flex-direction: row;
+        justify-content: center;
+        flex-wrap:wrap;
+        justify-content: space-around;
+    }
+    #pokedex-fichas article {
+    max-width: 30px;
+    
+    }
+ }
