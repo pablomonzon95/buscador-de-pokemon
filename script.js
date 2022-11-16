@@ -1,28 +1,28 @@
 "use strict";
-
+//
 ///////////////////
 /// API pokemon
 ///////////////////
 //
-// endpoint de lista completa de pokemon
 const urlApiLista = "https://pokeapi.co/api/v2/pokemon?limit=1126";
-// esta api devuelve un objeto, con 4 propiedades:
-// results: array de objetos; (catalogo de pokemons registrados en la api) en los q cada objeto es un pokemon, con dos propiedades:
-  //  name: string; nombre del pokemon
-  //  url: string; url a datos específicos de cada pokemon
-// count: num
-// next: url a otros resultados
-// prevuous. null
-
-/* ///////////////////
-/// ELEMENTOS HTML: seleccion de elemetnos html para modificar en función de los resultados
+/*  
+Esta api es el endpoint de lista completa de pokemons y devuelve un objeto, con 4 propiedades:
+  + results: array de objetos que represena un catalogo de pokemons registrados en la api, en el q cada objeto representa un pokemon, con dos propiedades:
+    -- name: string; nombre del pokemon
+    -- url: string; url a datos específicos de cada pokemon
+  + count: num
+  + next: url a otros resultados
+  + prevoious: null
+*/
 ///////////////////
+/// ELEMENTOS HTML
+///////////////////
+// Selección de elementos html para modificar en función de los resultados
 //
-// articulo q sirve de pokedex para contener los datos delpokemon buscado
+// articulo q sirve de contenedor para la ficha de los datos delpokemon buscado
 const pokedexArt = document.querySelector('main > article');
-  // pokedex nombre-titulo del pokemon buscado
-const pokedexNombre = document.querySelector('main > article > h2'); */
-
+// pokedex nombre-titulo del pokemon buscado
+const pokedexNombre = document.querySelector('main > article > h2');
 //
 ///////////////////////
 //// FUNCION FETCH
@@ -43,71 +43,68 @@ async function getApiData(api) {
 ///////////////////////
 //// FUNCION DATOS FICHA POKEMON
 ///////////////////////
+// Función q recupera los datos del pokemon y construye la ficha de informacion (la pokedex)
+//
 async function getPokemonData(api) {
   try {
     // llamo a getApiData para obtener los datos
     const apiData = await getApiData(api);
-    // apiData será un objeto del que nos interesa extraer: nombre, altura, peso, puntos de vida, ataque, defensa, velocidad y tipos a los que pertenece
-
+    /* apiData es un objeto con las siguientes propiedades:
+      + height: num; valor de altura
+      + name: string; nombre
+      + weight: num; peso
+      + stats: array; 6 elementos tipo objeto que representan una característica: hp, attack, defense, special-atack, special-defense, speed; y tienen la estructura:
+        -- base-stat: num; valor
+        -- effort: num; ?¿
+        -- stat: objeto; compuesto por:
+          --- name: string
+          --- url
+      + types: array; elementos tipo objeto q representa un tipo (1 o más), tienen estructura:
+        -- slot: num
+        -- type: objeto con dos propiedades
+          --- name: string; nombre del tipo
+          --- url
+     */
     // Desestructuro apiData para extrer los datos de interes de la respuesta
     const { height, name, weight, stats, types, sprites } = apiData;
 
-    // height: num; valor de altura
-    // name: string; nombre
-    // weight: num; peso
-    // stats: array; de 6 elementos tipo objeto; cada objeto representa una característica: hp, attack, defense, special-atack, special-defense, speed; y tienen la estructura:
-      // base-stat: num; valor
-      // effort: num; ?¿
-      // stat: objeto; compuesto por:
-        // name: string
-        //url
-    // types: array; de elementos tipo objeto; cada objeto representa un tipo al que pertence el pokemon (1 o más), tienen estructura:
-      // slot: num
-      // type: objeto con dos propiedades
-        // name: string; nombre del tipo
-        // url
-
-    // test
-    console.log(`TEST - nombre: ${name}`);
-    // test
-    console.log(`TEST - altura: ${height}`);
-    // test
-    console.log(`TEST - peso: ${weight}`);
-
-    // por cada elemento-tipo en el array de types
-    for (let tipo of types) {
-      // test
-      console.log(`TEST - tipo ${tipo["slot"]}: ${tipo["type"]["name"]}`);
+    // Traduccion de las propiedades estadisticas a castellano
+    for(let object of stats) {
+      switch (object["stat"]["name"]) {
+        case "hp":
+          object["stat"]["name"] = "Puntos de vida";
+          break;
+        case "attack":
+          object["stat"]["name"] = "Ataque";
+          break;
+        case "defense":
+          object["stat"]["name"] = "Defensa";
+          break;
+        case "special-attack":
+          object["stat"]["name"] = "Ataque especial";
+          break;
+      case "special-defense":
+          object["stat"]["name"] = "Defensa especial";
+          break;
+      case "speed":
+          object["stat"]["name"] = "Velocidad";
+          break;
+      default:
+        object["stat"]["name"] = "Habilidad desconocida";
+      }
     }
-
-    // por cada elemento-stat en el array de stats
-    for (let atributo of stats) {
-      // test
-      console.log(
-        `TEST - El atributo ${atributo["stat"]["name"]} tiene un valor de ${atributo["base_stat"]}`
-      );
-    }
-
-    // las imagenes
-    // test
-    console.log(`TEST - su foto frontal está en: ${sprites["front_default"]}`);
-    // test
-    console.log(`TEST - su foto trasera está en: ${sprites["back_default"]}`);
-    
-    ////////////////////////
-    // Modificación del HTML en caso de que se encuentre el pokemonBuscado inequívocamente
-    ////////////////////////
-
-    // creo la ficha de datos del poquemon en una ficha, a trozos, y luego la añado al html
-
-    // crear fragmento a añadir
+    // CONSTRUCCION DE LA FICHA DE DATOS DEL POKEMON: la creo a trozos, y luego la añado al html
+    // crear fragmento-ficha a añadir
       const fragPokedex = document.createDocumentFragment();
       
       // titulo de la ficha: nombre del pokemon
+        // crear elemento
       const pokedexTitulo = document.createElement('h3');
+        // añadir contenido al elemento
       pokedexTitulo.innerHTML = `${name}`;
+        // añadie elemento al fragmento-ficha
       fragPokedex.append(pokedexTitulo);
-
+      
       // imagenes de la ficha
       const pokedexImagenes = document.createElement('figure');
       pokedexImagenes.innerHTML =
@@ -115,32 +112,38 @@ async function getPokemonData(api) {
         <img id='imgTrasera' src="${sprites["back_default"]}" alt="imagen trasera del pokemon" />`;
       fragPokedex.append(pokedexImagenes);
 
-      // lista de atributos de la ficha
-        // enunciado de lista
+      // enunciado de la lista de atributos
+        // crear elemento
       const pokedexListaTitulo = document.createElement('h4');
+        // añadir contenido al elemento
       pokedexListaTitulo.innerHTML = `Atributos del pokemon ${name}:`;
+        // añadie elemento al fragmento-ficha
       fragPokedex.append(pokedexListaTitulo);
-
+      
       // lista de atributos
+        // crear elemento
       const pokedexLista = document.createElement('ul');
 
-      // por cada elemento-atributo del array stats
+        // por cada elemento-atributo del array stats
       for (let atributo of stats) {
+        // crear item de la lista de atributos
         const pokedexListaItem = document.createElement('li');
+        // añadir contenido al elemento
         pokedexListaItem.textContent = `${atributo["stat"]["name"]}: ${atributo["base_stat"]}`
+        // añadir elemento a la lista
         pokedexLista.append(pokedexListaItem);
       }
-
       // por cada elemento-tipo en el array de types
       for (let tipo of types) {
+        // crear item de la lista de atributos
         const pokedexListaItem = document.createElement('li');
+        // añadir contenido al elemento
         pokedexListaItem.textContent = `Tipo ${tipo["slot"]}: ${tipo["type"]["name"]}`
+        // añadir elemento a la lista
         pokedexLista.append(pokedexListaItem);
       }
-      
       // añadir lista de atributos al fragmento
       fragPokedex.append(pokedexLista);
-
       // añadir ficha de datos al HTML
       document.querySelector('#pokedex-fichas').append(fragPokedex);
   }
@@ -153,66 +156,60 @@ async function getPokemonData(api) {
 ///////////////////////
 //// FUNCION CATALOGO
 ///////////////////////
-// funcion para comprobar el catálogo de pokemon y obtener url del pokemon buscado
+//
+// Funcion para comprobar si el pokemon buscado existe en el catálogo y obtener su url; si no existe devuelve un listado de pokemons q empiezan por la misma letra que el input del usuario
+//
 async function checkPokemonCatalogo(api, inputUsuario) {
-  // pasar a minusculas el input del usuario, por si esqcribe con mayus
+  // pasar a minusculas el input del usuario, por si escribe con mayusculas
   const pokemonBuscado = inputUsuario.toLowerCase();
 
   try {
     // llamo a getApiData para obtener los datos
     const apiData = await getApiData(api);
-
+    /* 
+    apiData es un objeto con 4 propiedades, de la q solo nos interesa "results"
+     + results: array; catálogo de pokemons que existe en la api; sus elementos son:
+     objetos q representan el registro de un pokemon, de propiedades:
+      -- name: string: nombre del pokemon
+      -- url: string; url a los datos del pokemon
+    */
     // extraer de los datos de la api el array "results" y desechar el resto;
     const { results } = apiData;
-      // results es un array; el catálogo de pokemons que existe en la api; sus elementos son objetos con dos propiedades "name" y "url"
 
     // filtro results para ver si existe un pokemon de mismo nombre que pokemonBuscado
-      // creo un array registroPokemonBuscado con un filtro que solo deja pasar al elemento si la propiedad name es igual a pokemonBuscado
+      // creo un array registroPokemonBuscado
+      // el filtro solo deja pasar al elemento si la pokemonBuscado está contenido en su propiedad "name"
       let registroPokemonBuscado = results.filter((pokemon) => {
         if (pokemon["name"].indexOf(pokemonBuscado) !== -1) {
           return pokemon;
         } 
     });
-      // registroPokemonBuscado es un array que según exista o no pokemonBuscado en el catálogo de la api (array results) es:
-        // si no existe pokemonBuscado es un array vacio
-        // si sí existe pokemonBuscado es un array que contiene un único objeto, de propiedades "name" y "url"
-    // test
-    console.log(`TEST - registroPokemonBuscado en siguiente linea`);
-    // test
-    console.log(registroPokemonBuscado);
-    //
-    ////////////////////////
-    // Comprobación existencia pokemonBuscado
-    ////////////////////////
-    //
-    // compruebo si pokemonBuscado NO existe en el catálogo de la API (caso que registroPokemonBuscado está vacio)
-    //////////////////////////////
-    // si NO existe pokemonBuscado
-    //////////////////////////////
-    //
+    /*  
+    según pokemonBuscado exista o no en el catálogo de la api (array results) registroPokemonBuscado será:
+      + si no existe: un array vacio
+      + si sí existe: un array que contiene los registros de los pokemon q contienen ese nombre
+    */
+    /* 
+    ++++++++++++++++++++++++++++++
+    ++ si NO existe pokemonBuscado
+    ++++++++++++++++++++++++++++++
+    */
     if (registroPokemonBuscado.length === 0) {
-      // test
-      console.log(`TEST - No existe ningún pokemon con el nombre ${pokemonBuscado}`);
-      
-      // si NO existe pokemonBuscado buscar pokemons de nombre similar
-      // creo un array similaresPokemonBuscado con un filtro que solo deja pasar los elementos si la propiedad name empieza por la misma letra que pokemonBuscado
+      // buscar pokemons de nombre similar
+        // creo un array similaresPokemonBuscado
+          // el filtro solo deja pasar elementos si su propiedad "name" empieza por la misma letra que pokemonBuscado
       let similaresPokemonBuscado = results.filter((pokemon) => {
         if (pokemon["name"][0] === pokemonBuscado[0]) {
           return pokemon;
         } 
     });
-
-      // test
-      console.log(`TEST - Quizás buscabas alguno de los siguientes:`);
-      // test
-      console.log(similaresPokemonBuscado);
-
-      ////////////////////////
-      // Modificación del HTML en caso de que NO se encuentre el pokemonBuscado
-      ////////////////////////
-
-      // pokedex - preInfo
-      // crear fragmento
+      /*
+      ------------------------
+      -- Modificación del HTML
+      ------------------------
+      */
+      // preInfo a la ficha
+        // crear fragmento
       const fragPreInfo = document.createDocumentFragment();
 
       // titulo preInfo
@@ -225,7 +222,7 @@ async function checkPokemonCatalogo(api, inputUsuario) {
       preInfoImagen.innerHTML = `<img id='imgFrontal' src="./img/no-pokemon.gif" alt="no existe ese pokemon" />`;
       fragPreInfo.append(preInfoImagen);
 
-      // inidcador lista simialres preInfo
+      // enunciado lista similares preInfo
       const preInfoEnunciadoLista = document.createElement('h3');
       preInfoTitulo.innerHTML = `Quizás buscas alguno de estos:`;
       fragPreInfo.append(preInfoTitulo);
@@ -250,27 +247,48 @@ async function checkPokemonCatalogo(api, inputUsuario) {
       // añadir fragPreInfo a seleccion
       document.querySelector('#pokedex-preInfo').append(fragPreInfo);
     }
-    //////////////////////////////
-    // si SÍ existe inequívocamente pokemonBuscado (registroPokemonBuscado no vacio)
-    //////////////////////////////
-    //
+    /* 
+    ++++++++++++++++++++++++++++++
+    ++ si SÍ existe inequívocamente pokemonBuscado
+    ++++++++++++++++++++++++++++++
+    */
     else if (registroPokemonBuscado.length === 1) {
-      // test
-      console.log(`TEST - El pokemon buscado, ${pokemonBuscado}, existe y su info está disponible en: ${registroPokemonBuscado[0]["url"]}.`)
-      // test
-      console.log(`TEST - Llamando a getPokemonData con parámetro ${registroPokemonBuscado[0]["url"]}`);
+      /*
+      ------------------------
+      -- Modificación del HTML
+      ------------------------
+      */
+      // pokedex - preInfo
+      // crear fragmento
+      const fragPreInfo = document.createDocumentFragment();
+
+      // titulo preInfo
+      const preInfoTitulo = document.createElement('h2');
+      preInfoTitulo.innerHTML = `El pokemon ${pokemonBuscado} está registrado`;
+      fragPreInfo.append(preInfoTitulo);
+
+      // imagen preInfo
+      const preInfoImagen = document.createElement('figure');
+      preInfoImagen.innerHTML = `<img id='imgFrontal' src="./img/poke-ball" alt="imagen de una pokeball" />`;
+      fragPreInfo.append(preInfoImagen);
+
+      // añadir fragPreInfo a seleccion
+      document.querySelector('#pokedex-preInfo').append(fragPreInfo);
+
       // llamada para obtener datos del pokemonBuscado
       getPokemonData(registroPokemonBuscado[0]["url"]);
     }
-    //////////////////////////////
-    // si SÍ existe, pero existen más de 1 pokemon con pokemonBuscado en el nombre:
-    //////////////////////////////
+    /*
+    ++++++++++++++++++++++++++++++
+    ++ si SÍ existe, pero existen más de 1 pokemon con pokemonBuscado en el nombre:
+    ++++++++++++++++++++++++++++++
+    */
     else {
-      console.log(`TEST - hay varios pokemons con ese nombre`)
-      ////////////////////////
-      // Modificación del HTML en caso de que SÍ se ecuentren varios pokemons
-      ////////////////////////
-
+      /*
+      ------------------------
+      -- Modificación del HTML
+      ------------------------
+      */
       // pokedex - preInfo
       // crear fragmento
       const fragPreInfo = document.createDocumentFragment();
@@ -292,7 +310,6 @@ async function checkPokemonCatalogo(api, inputUsuario) {
       for (let pokemon of registroPokemonBuscado) {
         getPokemonData(pokemon["url"]);
       }
-
     }
   }
   // gestion en caso de error
@@ -302,8 +319,6 @@ async function checkPokemonCatalogo(api, inputUsuario) {
 }
 // seleccion del formulario
 const formulario = document.forms.formulario;
-//test
-console.log(formulario);
 //
 ///////////////////////
 //// FUNCION ENVIO FORMULARIO
@@ -311,15 +326,9 @@ console.log(formulario);
 function formSubmitHandle(e) {
   // evitar recarga de pagina tras enviar
   e.preventDefault();
-  //test
-  console.log("TEST - Formulario enviado");
 
   // crear objeto FormData con el input cuadno se envia
   const dataFormulario = new FormData(formulario);
-  // test
-  console.log("TEST console.log(dataFormulario) en la siguiente linea");
-  // test
-  console.log(dataFormulario);
 
   //desestructurar dataFormulario
     // creo un string vacio para meter despues el valor del input q introduzca el usuario
@@ -328,17 +337,9 @@ function formSubmitHandle(e) {
     // para cada array del objeto dataForm (en este caso 1 solo por 1 solo input (pokedex))
   for (let campo of dataFormulario) {
     const [nameInput, valueInput] = campo;
-    // test
-    console.log(`TEST - nameInput es ${nameInput}`);
-    // test
-    console.log(`TEST - valueInput es ${valueInput}`);
     pokemonBuscado = valueInput;
   }
-  //test
-  console.log(`TEST - El pokemon buscado es ${pokemonBuscado}`);
   
-  // test
-  console.log(`TEST - Llamando a checkPokemonCatalogo(urlApiLista, pokemonBuscado) con parámetros ${urlApiLista} y ${pokemonBuscado}`);
   // llamar a la funcion de comprobacion de catalogo de pokemon
   checkPokemonCatalogo(urlApiLista, pokemonBuscado);
 
