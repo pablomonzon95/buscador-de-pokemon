@@ -96,6 +96,7 @@ section{
  padding:0.5rem;
  border-radius: 3rem;
  background-color: white;
+ max-width: 30px;
 
 }
 #pokedex-fichas h3 {

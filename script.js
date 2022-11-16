@@ -214,9 +214,9 @@ async function checkPokemonCatalogo(api, inputUsuario) {
 
     // filtro results para ver si existe un pokemon de mismo nombre que pokemonBuscado
       // creo un array registroPokemonBuscado
-      // el filtro solo deja pasar al elemento si la pokemonBuscado está contenido en su propiedad "name"
+      // el filtro solo deja pasar al elemento si el pokemonBuscado está contenido en su propiedad "name" y se busca un nombre y no una letra
       let registroPokemonBuscado = results.filter((pokemon) => {
-        if (pokemon["name"].indexOf(pokemonBuscado) !== -1) {
+        if (pokemon["name"].includes(pokemonBuscado) && pokemonBuscado.length > 2) {
           return pokemon;
         } 
     });
@@ -309,8 +309,6 @@ async function checkPokemonCatalogo(api, inputUsuario) {
       ------------------------
       */
       // pokedex - preInfo
-
-      
 
       // notas preInfo
       preInfoTitulo.innerHTML = `Existen varios pokemon de nombre "${pokemonBuscado}"; puedes ver sus fichas de datos a continuación.`;
