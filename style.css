@@ -35,7 +35,7 @@ main{
 }
 main form{
     text-align: center;
-    margin-left:13%;
+    /*  margin-left:13%; */
 }
 label{
     font-size: 1.3rem; 
@@ -57,7 +57,7 @@ button{
 }
 
 section{
-    margin-left: 13%;
+    /* margin-left: 13%; */
 
 }
 #pokedex-preInfo figure{
@@ -103,6 +103,12 @@ section{
     margin: 0.8rem;
     text-align: center;
 }
+
+#pokedex-fichas figure {
+    display: flex;
+    align-items: center;
+}
+
 footer {
     height: 5vh;
     background-color: red;

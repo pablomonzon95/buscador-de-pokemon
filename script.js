@@ -110,8 +110,8 @@ async function getPokemonData(api) {
       // imagenes de la ficha
       const pokedexImagenes = document.createElement('figure');
       pokedexImagenes.innerHTML =
-        `<img id='imgFrontal' src="${sprites["front_default"]}" alt="imagen frontal del pokemon" />
-        <img id='imgTrasera' src="${sprites["back_default"]}" alt="imagen trasera del pokemon" />`;
+        `<img id='imgFrontal' src="${sprites["front_default"] !== null ? sprites["front_default"] : './img/icono-pro.webp'}" alt="imagen frontal del pokemon" />
+        <img id='imgTrasera' src="${sprites["back_default"] !== null ? sprites["back_default"] : './img/icono-pro.webp'}" alt="imagen trasera del pokemon" />`;
       fragPokedex.append(pokedexImagenes);
 
       // enunciado de la lista de atributos
